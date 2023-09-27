@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./script.js"></script>
+    <script src="./Pokemoninfo.js"></script>
+    <script src="./startscreen.js"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -18,54 +19,20 @@
     <link rel="stylesheet" href="./style.css" />
     <title>Pokedex</title>
   </head>
-  <body onload="loadPokemon()">
-    <div id="pokedex">
-      <div>
-        <svg
-          class="arrow-back"
-          xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
-          fill="currentColor"
-          class="bi bi-arrow-left"
-          viewBox="0 0 16 16"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-          />
-        </svg>
-      </div>
-      <div class="pokemon-name-id">
-        <h1 id="pokemonName"></h1>
-        <h6 id="pokemonGene"></h6>
-        <div><h2 id="pokemonType"></h2></div>
-        <h2 id="pokemonId"></h2>
-      </div>
-    </div>
-    <div class="pokemon-Info-container">
-      <div class="image-conatiner">
-        <img id="pokemonImage" src="#" alt="" />
-      </div>
-      <nav class="navigation-info">
-        <ul class="nav nav-underline">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Base Stats</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Evolution</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Moves</a>
-          </li>
-        </ul>
-      </nav>
-      <div>
-        <table id="pokemonInfoAbout" class="table table-borderless"></table>
-      </div>
-    </div>
-  </body>
+  <body onload="init()"></body>
+  <div id="infoContainer"></div>
+  <div id="Pokemoncontainer" class="show-pokemons"></div>
+  <div>
+    <button onclick="nextPage()">next</button>
+    <button onclick="previousPage()">previous</button>
+  </div>
+  <div>
+    <label for="loadmore">choose a number:</label>
+    <select id="loadmore">
+      <option value="10">10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+    </select>
+    <button onclick="loadMorePokemons()">load more Pokemons</button>
+  </div>
 </html>

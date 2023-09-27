@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./Pokemoninfo.js"></script>
+    <script src="./startscreen.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="./style.css" />
+    <title>Pokedex</title>
+  </head>
+  <body onload="loadPokemon()">
+    </section>
+    <section id="loadPokemonInfo">
+      <div id="pokedex">
+        <a href="./index.html">
+        <div>
+          <svg
+            class="arrow-back"
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            class="bi bi-arrow-left"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+            />
+          </svg>
+        </div>
+      </a>
+        <div class="pokemon-name-id">
+          <div>
+            <h1 id="pokemonName"></h1>
+            <h6 id="pokemonGene"></h6>
+            <div class="pokemon-id"><h2 id="pokemonId"></h2></div>
+          </div>
+          <div><h2 id="pokemonType"></h2></div>
+        </div>
+      </div>
+      <div class="pokemon-Info-container">
+        <div class="image-conatiner">
+          <img id="pokemonImage" src="#" alt="" />
+        </div>
+        <nav id="pokemonInfoNavigation" class="navigation-info">
+          <ul class="nav nav-underline">
+            <li class="nav-item">
+              <a onclick="aboutCard()" id="about" class="nav-link" href="#"
+                >About</a
+              >
+            </li>
+            <li class="nav-item">
+              <a id="baseStats" onclick="statsCard()" class="nav-link" href="#"
+                >Base Stats</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                onclick="getEvolution()"
+                id="evolution"
+                class="nav-link"
+                href="#"
+                >Evolution</a
+              >
+            </li>
+            <li class="nav-item">
+              <a onclick="renderMoves()" id="moves" class="nav-link" href="#"
+                >Moves</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div id="infoContainer" class="pokemon-infos"></div>
+      </div>
+    </section>
+  </body>
+</html>
