@@ -10,41 +10,78 @@ function extractPokemonName() {
 async function loadPokemon() {
   let name = extractPokemonName();
   let url = `https://pokeapi.co/api/v2/pokemon/${name}`;
-  let response = await fetch(url);
-  currentPokemon = await response.json();
-  console.log(currentPokemon);
-  await loadSpeciesInformation();
-  await loadEvolutionChain();
-  renderPokemonInfo();
-  renderColor();
-  aboutCard();
+  let [response, err] = await resolve(fetch(url));
+  if (response) {
+    currentPokemon = await response.json();
+    console.log(currentPokemon);
+    await loadSpeciesInformation();
+    await loadEvolutionChain();
+    getPokemonInfo();
+    renderColor();
+    aboutCard();
+  }
+  if (err) {
+    alert("Error");
+  }
 }
 
 async function loadSpeciesInformation() {
   let id = currentPokemon["id"];
   let url = `https://pokeapi.co/api/v2/pokemon-species/${id}/`;
-  let response = await fetch(url);
-  species = await response.json();
-  console.log(species);
+  let [response, err] = await resolve(fetch(url));
+  if (response) {
+    species = await response.json();
+    console.log(species);
+  }
+  if (err) {
+    alert("Error");
+  }
 }
 
 async function loadEvolutionChain() {
   let url = species["evolution_chain"]["url"];
   let response = await fetch(url);
   evolution = await response.json();
+  if (evolution["chain"]["evolves_to"][0]["evolves_to"].length === 0) {
+    document.getElementById("evolution").classList.add("d-none");
+  } else {
+    document.getElementById("evolution").classList.remove("d-none");
+  }
 }
 
-function renderPokemonInfo() {
+async function resolve(p) {
+  try {
+    let response = await p;
+    console.log(response.status);
+    if (response.status === 404) {
+      window.location.href = "/Pokdex/404.html";
+    }
+    return [response, null];
+  } catch (e) {
+    console.warn(e);
+    return [null, e];
+  }
+}
+
+function getPokemonInfo() {
   let type = getTypes();
-  document.getElementById("pokemonType").innerHTML = type;
+  let id = currentPokemon["id"];
+  let paddedNum = "#" + id.toString().padStart(3, "0");
+  renderPokemonInfo(type, paddedNum);
+}
+
+function renderPokemonInfo(type, paddedNum) {
+  let typeContainer = document.getElementById("pokemonType");
   document.getElementById("pokemonName").innerHTML = currentPokemon["name"];
   document.getElementById("pokemonGene").innerHTML =
     species["genera"][7]["genus"];
-  let id = currentPokemon["id"];
-  let paddedNum = "#" + id.toString().padStart(3, "0");
   document.getElementById("pokemonId").innerHTML += `${paddedNum}`;
   document.getElementById("pokemonImage").src =
     currentPokemon["sprites"]["other"]["official-artwork"]["front_default"];
+
+  typeContainer.innerHTML = `
+    <span class="pokemon-info-type">${type}</span>
+    `;
 }
 
 function showNavigation() {
@@ -55,10 +92,26 @@ function showNavigation() {
 function renderColor() {
   let type = getTypes()[0];
   let pokedex = document.getElementById("pokedex");
-  let colortype = document.getElementById("pokemonType");
-  if (type == "fire") {
-    pokedex.classList.add("fire");
-    colortype.classList.add("fire-type");
+  let typeToClass = {
+    water: "water",
+    grass: "grass",
+    bug: "grass",
+    fire: "fire",
+    electric: "electro",
+    normal: "normal",
+    fighting: "normal",
+    ground: "ground",
+    poison: "poison",
+    fairy: "fairy",
+    psychic: "psychic",
+    ghost: "psychic",
+    rock: "rock",
+  };
+  pokedex.classList.add("rest");
+  if (type in typeToClass) {
+    let className = typeToClass[type];
+    pokedex.classList.remove("rest");
+    pokedex.classList.add(className);
   }
 }
 
@@ -167,10 +220,14 @@ function getEvolution() {
   let secondEvolution = evolution["chain"]["evolves_to"][0]["species"]["name"];
   let thirdEvolution =
     evolution["chain"]["evolves_to"][0]["evolves_to"][0]["species"]["name"];
+
   renderEvolution(firstEvolution, secondEvolution, thirdEvolution);
 }
 
 function renderEvolution(firstEvolution, secondEvolution, thirdEvolution) {
+  let url = `/Pokdex/PokemonInfo.html?pokemon=${firstEvolution}`;
+  let url2 = `/Pokdex/PokemonInfo.html?pokemon=${secondEvolution}`;
+  let url3 = `/Pokdex/PokemonInfo.html?pokemon=${thirdEvolution}`;
   removActiveclass();
   let showEvolution = document.getElementById("evolution");
   showEvolution.classList.add("active");
@@ -180,15 +237,15 @@ function renderEvolution(firstEvolution, secondEvolution, thirdEvolution) {
   <tbody>
     <tr>
       <th scope="row">1.Evolution</th>
-      <td><b>${firstEvolution}</b></td>
+      <td><a href="${url}"><b>${firstEvolution}</b></a></td>
     </tr>
     <tr>
       <th scope="row">2.Evolution</th>
-      <td><b>${secondEvolution}</b></td>
+      <td><a href="${url2}"><b>${secondEvolution}</b></a></td>
     </tr>
     <tr>
       <th scope="row">3.Evolution</th>
-      <td><b>${thirdEvolution}</b></td>
+      <td><a href="${url3}"><b>${thirdEvolution}</b></a></td>
     </tr>
   </tbody>
 </table>
@@ -244,7 +301,6 @@ function renderStatBar(
   let progressSpecDef = document.getElementById("progressSpecDef");
   let progressSpecAtt = document.getElementById("progressSpecAtt");
   let progressSpeed = document.getElementById("progressSpeed");
-
   let progressBars = [
     progressHp,
     progressAtt,
@@ -253,7 +309,6 @@ function renderStatBar(
     progressSpecAtt,
     progressSpeed,
   ];
-
   let stats = [hp, attack, defense, specialDefense, specialAttack, speed];
   for (let i = 0; i < stats.length; i++) {
     let cssClass = "bg-success";

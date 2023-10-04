@@ -3,9 +3,11 @@ let PokemonData;
 let pageNumber = 1;
 let limit = 10;
 
+
 function init() {
   loadStartScreen();
 }
+
 
 async function loadStartScreen() {
   let apiUrl = "https://pokeapi.co/api/v2/pokemon";
@@ -91,7 +93,7 @@ function renderInfos() {
   let infoContainer = document.getElementById("infoContainer");
   infoContainer.innerHTML = `
   <div class="infos">
-    <span>Total: ${totalPokemons}</span>
+    <span>Total Pokemon count: ${totalPokemons}</span>
     <span>Remaining Pokemons: ${rest}</span>
   </div>
   `;
@@ -103,9 +105,13 @@ function renderData(PokemonData, imageUrl, i) {
   let type = loadpokemonType();
   container.innerHTML += `
     <div id="pokemonCardContainer${i}" onclick="getClickedPokemonName('${PokemonData["name"]}')" class="pokemon-card">
-      <h2> ${PokemonData["name"]}</h2>
-      <span>${type}</span>
-      <img src="${imageUrl}">
+      <div class="card-headline">
+        <h2> ${PokemonData["name"]}</h2>
+        <span class="pokemon-info-type">${type}</span>
+      </div>
+        <div class="card-image">
+          <img src="${imageUrl}">
+        </div>
     </div>
     `;
   checkBackground(i, type);
@@ -141,8 +147,29 @@ function getClickedPokemonName(name) {
   createUrlParameter(clickedName);
 }
 
+function checkInputLength(){
+  let input = document.getElementById("searchInput");
+  let inputValue = document.getElementById("searchInput").value;
+  let submitBtn = document.getElementById("submitButton");
+
+  if(inputValue.length < 5){
+    input.classList.add("is-invalid");
+  }else {
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
+    submitBtn.removeAttribute("disabled");
+   
+  }
+}
+
 function createUrlParameter(clickedName) {
   let name = clickedName;
+  let url = `/Pokdex/PokemonInfo.html?pokemon=${name}`;
+  window.location.href = url; // öffnet die URL im gleichen Fenster
+}
+
+function createUrlParameterFromSearch() {
+  let name = document.getElementById("searchInput").value;
   let url = `/Pokdex/PokemonInfo.html?pokemon=${name}`;
   window.location.href = url; // öffnet die URL im gleichen Fenster
 }
